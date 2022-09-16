@@ -1,20 +1,27 @@
 import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
-import { Image } from "@shopify/hydrogen-ui-alpha";
-import type { FormattedExecutionResult } from "graphql";
+import {
+  Image,
+  type StorefrontApiResponseOk,
+} from "@shopify/hydrogen-ui-alpha";
 import type {
   Shop,
   ProductConnection,
 } from "@shopify/hydrogen-ui-alpha/storefront-api-types";
+import { shopClient } from "../shopify-client";
+import { gql } from "graphql-request";
+import type { GetServerSideProps } from "next";
 
-export default function Home({ data, errors }: StorefrontApiResponse) {
+export default function Home({
+  data,
+  errors,
+}: StorefrontApiResponseOk<StorefrontResponseShape>) {
   if (errors) {
     console.log(errors.map((err) => err.message));
     return null;
   }
 
-  console.log("data", data);
   return (
     <Layout home>
       <Head>
@@ -31,37 +38,44 @@ export default function Home({ data, errors }: StorefrontApiResponse) {
   );
 }
 
-export async function getServerSideProps() {
-  const req = await fetch(
-    `https://hydrogen-preview.myshopify.com/api/2022-07/graphql.json`,
-    {
-      method: "POST",
-      body: query,
-      headers: {
-        "X-Shopify-Storefront-Access-Token": "3b580e70970c4528da70c98e097c2fa0",
-        "content-type": "application/graphql",
-      },
-    }
-  );
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  // const buyerIp =
+  //   req.headers["x-real-ip"] ??
+  //   req.headers["x-forwarded-for"] ??
+  //   req.socket.remoteAddress;
 
-  const reqJson = (await req.json()) as StorefrontApiResponse;
-  // console.log("reqjson", reqJson);
+  const response = await fetch(shopClient.getStorefrontApiUrl(), {
+    method: "POST",
+    body: query,
+    // TODO: convert to 'getPrivateTokenHeaders({buyerIp})'
+    headers: shopClient.getPublicTokenHeaders(),
+  });
 
-  return { props: reqJson };
-}
+  if (!response.ok) {
+    const errors = await response.text();
+    return { props: { errors } };
+  }
 
-type StorefrontApiResponse = FormattedExecutionResult<{
-  shop: Pick<Shop, "name">;
+  const responseJson =
+    (await response.json()) as StorefrontApiResponseOk<StorefrontResponseShape>;
+
+  return { props: responseJson };
+};
+
+type StorefrontResponseShape = {
+  shop: Shop;
   products: ProductConnection;
-}>;
+};
 
-const query = `
+const query = gql`
   {
     shop {
       name
     }
     products(first: 1) {
       nodes {
+        # if you uncomment 'blah', it should have a GraphQL validation error in your IDE if you have a GraphQL plugin
+        # blah
         id
         title
         publishedAt
