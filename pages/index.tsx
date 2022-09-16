@@ -53,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
   if (!response.ok) {
     const errors = await response.text();
-    return { props: { errors } };
+    throw new Error(errors);
   }
 
   const responseJson =
