@@ -1,14 +1,11 @@
 import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
-import {
-  Image,
-  type StorefrontApiResponseOk,
-} from "@shopify/hydrogen-ui-alpha";
+import { Image, type StorefrontApiResponseOk } from "@shopify/hydrogen-react";
 import type {
   Shop,
   ProductConnection,
-} from "@shopify/hydrogen-ui-alpha/storefront-api-types";
+} from "@shopify/hydrogen-react/storefront-api-types";
 import { shopClient } from "../shopify-client";
 import { gql } from "graphql-request";
 import type { GetServerSideProps } from "next";

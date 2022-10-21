@@ -6,7 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@shopify/hydrogen-ui-alpha": "^2022.7.4",
+    "@shopify/hydrogen-react": "^2022.7.0",
     "date-fns": "^2.11.1",
     "graphql-request": "^5.0.0",
     "gray-matter": "^4.0.2",
