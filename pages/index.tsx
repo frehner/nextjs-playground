@@ -23,7 +23,7 @@ export default function Home({
       </Head>
       <section className={utilStyles.headingMd}>
         <p>{data.shop.name}</p>
-        {/* @TODO Using hydrogen-react's <Image/> is nice, but we should also provide our 'loader' so you can used NextJS' as well */}
+        {/* @TODO Using hydrogen-react's <Image/> is nice, but we should also provide our 'loader' so you can used NextJS' Image component as well */}
         <Image
           data={data.products.nodes[0].variants.nodes[0].image}
           width={500}

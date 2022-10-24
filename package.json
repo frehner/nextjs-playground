@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@shopify/hydrogen-react": "^2022.7.0",
+    "@shopify/hydrogen-react": "^0.0.0-next-5229051",
     "date-fns": "^2.11.1",
     "graphql-request": "^5.0.0",
     "gray-matter": "^4.0.2",
