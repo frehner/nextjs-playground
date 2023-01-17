@@ -1,7 +1,10 @@
 import Head from "next/head";
 import Layout, { siteTitle } from "../components/layout";
 import utilStyles from "../styles/utils.module.css";
-import { Image, type StorefrontApiResponseOk } from "@shopify/hydrogen-react";
+import {
+  Image,
+  type StorefrontApiResponseOk,
+} from "@shopify/storefront-kit-react";
 import { shopClient } from "../shopify-client";
 import type { GetServerSideProps } from "next";
 import { graphql } from "../gql/gql";
@@ -23,7 +26,7 @@ export default function Home({
       </Head>
       <section className={utilStyles.headingMd}>
         <p>{data.shop.name}</p>
-        {/* @TODO Using hydrogen-react's <Image/> is nice, but we should also provide our 'loader' so you can used NextJS' Image component as well */}
+        {/* @TODO Using storefront-kit's <Image/> is nice, but we should also provide our 'loader' so you can used NextJS' Image component as well */}
         <Image
           data={data.products.nodes[0].variants.nodes[0].image}
           width={500}
